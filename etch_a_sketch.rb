@@ -1,236 +1,290 @@
 # A progression of Shoes (shoooes.net) applications, from empty to
 # a canvas with drawing and buttons. Used in GetSET program curriculum.
+# Includes some stuff we didn't get to in class at the end of the file.
 # Note: if you run this file as-is, you'll get tons of open windows -
 # I recommend running one Shoes.app block at a time.
  
-# Empty application
+# Step 0 - a blank application
 Shoes.app do
  
 end
  
-# Add some text
+# Step 1 - add some text
 Shoes.app do
   para "Hello, world"
 end
  
-# Now let's center it in the window
+# Step 2 - add some attributes to the text
 Shoes.app do
-  para "Hello, world", :align => 'center'
+  para "Hello, world", :align => "center", :size => "xx-large"
 end
  
-# Bigger!
-Shoes.app do
-  para "Hello, world", :align => 'center', :size => 'xx-large'
-end
- 
-# Custom window title!
+# Step 3 - custom window title!
 Shoes.app :title => "My awesome application" do
-  para "Hello, world", :align => 'center', :size => 'xx-large'
+  para "Hello, world", :align => "center", :size => "xx-large"
 end
  
-# Background color! Try other named colors!
+# Step 4 - background color
 Shoes.app :title => "My awesome application" do
   background tomato
-  para "Hello, world", :align => 'center', :size => 'xx-large'
+  para "Hello, world", :align => "center", :size => "xx-large"
 end
  
-# Move mouse around to get line from 0,0 to current location
+# Step 5 - text color
 Shoes.app :title => "My awesome application" do
   background tomato
-  para "Hello, world", :align => 'center', :size => 'xx-large'
- 
-  animate do
-    button, left, top = self.mouse
-    line 0, 0, left, top
-  end
+  para "Hello, world", :align => "center", :size => "xx-large", 
+                       :stroke => saddlebrown
 end
- 
-# Get line from 0,0 to current location only when mouse button is down
+
+# Step 6 - named color method
 Shoes.app :title => "My awesome application" do
-  background tomato
-  para "Hello, world", :align => 'center', :size => 'xx-large'
-  animate do
-    button, left, top = self.mouse
-    line 0, 0, left, top unless button == 0
+  def periwinkle
+    rgb(180,170,205)
   end
+  background periwinkle
+  para "Hello, world", :align => "center", :size => "xx-large", 
+                       :stroke => saddlebrown
 end
- 
-# Click to draw - line will follow mouse
+
+# Step 7 - adding a button
 Shoes.app :title => "My awesome application" do
-  background tomato
-  para "Hold mouse button to draw!", :align => 'center', :size => 'xx-large'
-  animate do
-    button, left, top = self.mouse
-    if @prev_left and @prev_top and button != 0
-      line @prev_left, @prev_top, left, top
-    end
-    @prev_left = left
-    @prev_top = top
+  def periwinkle
+    rgb(180,170,205)
   end
+  background periwinkle
+
+  button "Change the text" do
+    @headline.text = "I'm changed!"
+  end
+
+  @headline = para "Hello, world", :align => "center", 
+                                   :size => "xx-large", 
+                                   :stroke => saddlebrown
 end
- 
-# Add clear button
+
+# Step 8 - coordinates
 Shoes.app :title => "My awesome application" do
- 
-  canvas = DrawingCanvas.new(self)
-  canvas.reset
- 
-  animate do
-    button, left, top = self.mouse
-    if @prev_left and @prev_top and button != 0
-      line @prev_left, @prev_top, left, top
-    end
-    @prev_left = left
-    @prev_top = top
+  def periwinkle
+    rgb(180,170,205)
   end
+  background periwinkle
+
+  animate do 
+    @button, @left, @top = self.mouse
+    @headline.text = "#{@button} #{@left} #{@top}"
+  end
+
+  @headline = para "Hello, world", :align => "center", 
+                                   :size => "xx-large",  
+                                   :stroke => saddlebrown
 end
- 
-class DrawingCanvas
-  def initialize(area)
-   debug area.class.name
-    @flow = area
-    reset
-  end
- 
-  def reset
-    canvas = self
-    @flow.app do
-      clear do
-        background tomato
-        para "Hold mouse button to draw!", :align => 'center', :size => 'xx-large'
-        canvas.clear_button
-      end
-    end
-  end
- 
-  def clear_button
-    canvas = self
-    @flow.app do
-      button "Clear" do
-        canvas.reset
-      end
-    end
-  end
-end
- 
-# Add a clear button (simpler implementation)
+
+# Step 9 - drawing lines based on mouse coordinates
 Shoes.app :title => "My awesome application" do
+  def periwinkle
+    rgb(180,170,205)
+  end
+  background periwinkle
+
+  animate do 
+    @button, @left, @top = self.mouse
+    line 0, 0, @left, @top
+  end
+
+  @headline = para "Draw!", :align => "center", 
+                            :size => "xx-large", 
+                            :stroke => saddlebrown
+end
  
-  animate do
-    button, left, top = self.mouse
-    if @prev_left and @prev_top and button != 0
-      line @prev_left, @prev_top, left, top
+# Step 10 - only drawing a line when the button is down
+Shoes.app :title => "My awesome application" do
+  def periwinkle
+    rgb(180,170,205)
+  end
+  background periwinkle
+
+  animate do 
+    @button, @left, @top = self.mouse
+    unless @button == 0
+      line 0, 0, @left, @top
     end
-    @prev_left = left
-    @prev_top = top
+  end
+
+  @headline = para "Draw!", :align => "center", 
+                            :size => "xx-large", 
+                            :stroke => saddlebrown
+end
+ 
+# Step 11 - drawing from previous to current coordinates
+Shoes.app :title => "My awesome application" do
+  def periwinkle
+    rgb(180,170,205)
+  end
+  background periwinkle
+
+  animate do 
+    previous_left = @left
+    previous_top = @top
+    @button, @left, @top = self.mouse
+    unless @button == 0
+      line previous_left, previous_top, @left, @top
+    end
+  end
+
+  @headline = para "Draw!", :align => "center", 
+                            :size => "xx-large", 
+                            :stroke => saddlebrown
+end
+ 
+# Step 12 - a clear button
+Shoes.app :title => "My awesome application" do
+  def periwinkle
+    rgb(180,170,205)
+  end
+  background periwinkle
+
+  animate do 
+    previous_left = @left
+    previous_top = @top
+    @button, @left, @top = self.mouse
+    unless @button == 0
+      line previous_left, previous_top, @left, @top
+    end
+  end
+
+  button "Clear" do
+    background periwinkle
+    @headline.remove
+    @headline = para "Draw!", :align => "center", 
+                              :size => "xx-large", 
+                              :stroke => saddlebrown
+  end
+
+  @headline = para "Draw!", :align => "center", 
+                            :size => "xx-large", 
+                            :stroke => saddlebrown
+end
+
+# Allow user to pick background color (didn't get to this in class)
+Shoes.app :title => "My awesome application" do
+  def periwinkle
+    rgb(180,170,205)
+  end
+
+  animate do
+    previous_left = @left
+    previous_top = @top
+    @button, @left, @top = self.mouse
+    unless @button == 0
+      line previous_left, previous_top, @left, @top
+    end
   end
  
   def reset_canvas
     clear do
-      background tomato
-      para "Hold mouse button to draw!", :align => 'center', :size => 'xx-large'
+      background @bg_color
       button "Clear" do
         reset_canvas
       end
+      button "Background Color" do
+        @bg_color = ask_color "Choose a background color"
+        reset_canvas
+      end
+      @headline.remove if @headline
+      @headline = para "Draw!", :align => "center", 
+                                :size => "xx-large", 
+                                :stroke => saddlebrown
     end
   end
  
+  @bg_color = periwinkle
   reset_canvas
-end
+end 
  
-# Allow user to pick background color
+# Let user change line color (didn't get to this in class)
 Shoes.app :title => "My awesome application" do
- 
-  animate do
-    button, left, top = self.mouse
-    if @prev_left and @prev_top and button != 0
-      line @prev_left, @prev_top, left, top
-    end
-    @prev_left = left
-    @prev_top = top
+  def periwinkle
+    rgb(180,170,205)
   end
  
   def reset_canvas
     clear do
-      background tomato
-      para "Hold mouse button to draw!", :align => 'center', :size => 'xx-large'
+      background @bg_color
+      
       button "Clear" do
         reset_canvas
       end
-      button "Change Background" do
-        new_color = ask_color "Choose a background color"
-        background new_color
-      end
-    end
-  end
- 
-  reset_canvas
-end
- 
-# Make it so we always get our buttons and headline back
-Shoes.app :title => "My awesome application" do
- 
-  animate do
-    button, left, top = self.mouse
-    if @prev_left and @prev_top and button != 0
-      line @prev_left, @prev_top, left, top
-    end
-    @prev_left = left
-    @prev_top = top
-  end
-  
-  @background_color = tomato
- 
-  def reset_canvas
-    clear do
-      background @background_color
-      para "Hold mouse button to draw!", :align => 'center', :size => 'xx-large'
-      button "Clear" do
+      button "Background Color" do
+        @bg_color = ask_color "Choose a background color"
         reset_canvas
       end
-      button "Change Background" do
-        @background_color = ask_color "Choose a background color"
-        reset_canvas
-      end
-    end
-  end
- 
-  reset_canvas
-end
- 
-# Let user change line color
-Shoes.app :title => "My awesome application" do
- 
-  animate do
-    button, left, top = self.mouse
-    if @prev_left and @prev_top and button != 0
-      stroke @line_color
-      line @prev_left, @prev_top, left, top
-    end
-    @prev_left = left
-    @prev_top = top
-  end
-  
-  @background_color = tomato
-  @line_color = black
- 
-  def reset_canvas
-    clear do
-      background @background_color
-      para "Hold mouse button to draw!", :align => 'center', :size => 'xx-large'
-      button "Clear" do
-        reset_canvas
-      end
-      button "Change Background" do
-        @background_color = ask_color "Choose a background color"
-        reset_canvas
-      end
-      button "Change Line Color" do
+      button "Line Color" do
         @line_color = ask_color "Choose a line color"
+        reset_canvas
       end
+      @headline.remove if @headline
+      @headline = para "Draw!", :align => "center", 
+                                :size => "xx-large", 
+                                :stroke => saddlebrown
     end
   end
+
+  @bg_color = periwinkle
+  @line_color = saddlebrown
   
+  animate do
+    previous_left = @left
+    previous_top = @top
+    @button, @left, @top = self.mouse
+    unless @button == 0
+      line previous_left, previous_top, @left, @top, :stroke => @line_color
+    end
+  end
+ 
   reset_canvas
 end
+
+# Put all the buttons in a column (didn't get to this in class)
+Shoes.app :title => "My awesome application" do
+  def periwinkle
+    rgb(180,170,205)
+  end
  
+  def reset_canvas
+    clear do
+      background @bg_color
+      stack :width => 120 do 
+        button "Clear", :width => 120 do
+          reset_canvas
+        end
+        button "Background Color", :width => 120 do
+          @bg_color = ask_color "Choose a background color"
+          reset_canvas
+        end
+        button "Line Color", :width => 120 do
+          @line_color = ask_color "Choose a line color"
+          reset_canvas
+        end
+      end
+      @headline.remove if @headline
+      @headline = para "Draw!", :align => "center", 
+                                :size => "xx-large", 
+                                :stroke => saddlebrown
+    end
+  end
+
+  @bg_color = periwinkle
+  @line_color = saddlebrown
+  
+  animate do
+    previous_left = @left
+    previous_top = @top
+    @button, @left, @top = self.mouse
+    unless @button == 0
+      line previous_left, previous_top, @left, @top, :stroke => @line_color
+    end
+  end
+ 
+  reset_canvas
+end
