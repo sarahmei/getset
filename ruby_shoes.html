@@ -12,6 +12,7 @@ body {
   font-size: 38px;
   color: #111;
   background: #fff;
+  overflow: hidden;
 }
 
 pre {
@@ -28,6 +29,17 @@ blockquote {
 
 ul {
   padding: 0 0 0 1em;
+}
+
+#instructions {
+  position: absolute;
+  width: 99%;
+  text-align: center;
+  background: #ffd;
+  font-size: 20px;
+  padding: 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #ff0;
 }
 
 #slides {
@@ -117,34 +129,8 @@ ul {
 .code .vg { color: #008080 } /* Name.Variable.Global */
 .code .vi { color: #008080 } /* Name.Variable.Instance */
 .code .il { color: #009999 } /* Literal.Number.Integer.Long */
+
     </style>
-    
-      <style type="text/css" media="screen">
-        .centereverything {
-  text-align: center;
-}
-
-.slide-hilite {
-  text-color: red;
-}
-
-.big-text {
-  font-size: 150%;
-}
-
-.table-code {
-  font-family: Bitstream Vera Sans Mono;
-}
-li {
-    padding: 8;
-}
-
-td {
-    font-size: 32px; 
-    padding: 8;
-}
-
-      </style>
     
     <script type="text/javascript">
       /*!
@@ -4756,43 +4742,43 @@ jQuery.extend( jQuery.easing,
   var allSlides = function() {
     return $('#slides #track > div');
   }
-  
+
   var slideDimensions = function() {
     return {
       width: $(window).width(),
       height: $(window).height()
     }
   }
-  
+
   var getIndex = function() {
     var index = document.location.hash.split('#')[1];
     return Number(index);
   }
-  
+
   var setIndex = function(idx) {
     var newSlide = '#slide-' + idx;
     if ($(newSlide).size() < 1) { return false; }
     document.location.hash = '#' + idx;
   }
-  
+
   var setSlideDimensions = function() {
     var dimensions = slideDimensions();
-    
+
     $('#slides').height(dimensions.height);
     $('#slides').width(dimensions.width);
-    
+
     allSlides().height(dimensions.height);
     allSlides().width(dimensions.width);
   }
-  
+
   var showCurrentSlide = function() {
     var dimensions = slideDimensions();
     var index = getIndex();
     var offset = (index || 0) * dimensions.width;
-    
-    $('#track').animate({ marginLeft: '-' + offset + 'px' }, 0);
+
+    $('#track').animate({ marginLeft: '-' + offset + 'px' }, 200);
   }
-  
+
   var verticalAlign = function() {
     var dimensions = slideDimensions();
     var margin = (dimensions.height - $(this).height()) / 2;
@@ -4806,44 +4792,66 @@ jQuery.extend( jQuery.easing,
       overflow: 'hidden',
       fontSize: '26px'
     });
-    
+
     allSlides().find('.content').each(verticalAlign);
   }
-  
+
   var adjustSlides = function() {
     var dimensions = slideDimensions();
-    
+
     setSlideDimensions();
     showCurrentSlide();
 
     formatGist();
   }
-  
+
   var move = function(event) {
     var DIRECTIONS = {
-      1: 1,   // LEFT MOUSE BTN
-      3: 1,   // RIGHT MOUSE BTN
-      37: -1, // ARROW LEFT
-      39: 1,  // ARROW RIGHT
-      32: 1,  // SPACE BAR
-      13: 1   // RETURN
+      37: -1,     // ARROW LEFT
+      39: 1,      // ARROW RIGHT
+      32: 1,      // SPACE BAR
+      13: 1,      // RETURN
+      27: 'home', // ESCAPE
+      left: -1,
+      right: 1
     }
-    
-    if (dir = DIRECTIONS[event.which]) {
-      setIndex(getIndex() + dir);
+
+    if (dir = DIRECTIONS[event.which || event]) {
+      if (dir == 'home') {
+        event.preventDefault();
+        event.stopPropagation();
+        location.href = '/';
+      } else {
+        $('#instructions').slideUp(100);
+        setIndex(getIndex() + dir);
+      }
     }
   }
-  
+
+  function clickMove(e) {
+    if (e.pageX < ($(window).width() / 2)) {
+      move('left');
+    } else {
+      move('right');
+    }
+  }
+
+  function hideInstructions() {
+    $('#instructions').slideUp(200);
+  }
+
   $(window).bind('resize', function() { adjustSlides(); });
   $(document).bind('keydown', move);
-  $(document).bind('click', move);
   $(document).bind('hash.changed', adjustSlides);
+  $(document).bind('click', clickMove);
   $(document).ready(function() {
     setIndex(getIndex() || 0);
     $(this).trigger('hash.changed');
     if (document.location.search.indexOf('notes') == 1) {
       $('.notes').show();
     }
+
+    window.setTimeout(hideInstructions, 3000);
   });
 })(jQuery);
 
@@ -4851,34 +4859,38 @@ jQuery.extend( jQuery.easing,
     
   </head>
   <body>
+    <div id="instructions">
+      Use the left/right arrow keys to navigate.
+    </div>
     <div id="slides">
       <div id="track">
         
           <div class=" ">
             <div id="slide-0" class="content">
-              <img src="img/ruby_logo.jpg" height="200"><h3 id="id1">&nbsp;</h3><h1 id="getset_ruby_workshop">GetSET Ruby Workshop</h1><h3 id="id2">&nbsp;</h3><h3 id="sarah_mei">Sarah Mei</h3><h3 id="august_5th_2009">August 5th, 2009</h3><h3 id="httpgithubcomsarahmeigetset">http://github.com/sarahmei/getset</h3>
+              <p><img src="img/ruby_logo.jpg" height="200"></p><h3>&nbsp;</h3><h1>GetSET Ruby Workshop</h1><h3>&nbsp;</h3><h3>Sarah Mei</h3><h3>August 5th, 2010</h3><h3>http://github.com/sarahmei/getset</h3>
             </div>
           </div>
         
           <div class="">
             <div id="slide-1" class="content">
-              <h1 id="intro_to_programming">Intro to Programming</h1>
+              <h1>Intro to Programming</h1>
             </div>
           </div>
         
           <div class="">
             <div id="slide-2" class="content">
-              <h1 id="doing_fun_stuff_with_code">Doing fun stuff with code</h1>
+              <h1>Doing fun stuff with code</h1>
             </div>
           </div>
         
           <div class="">
             <div id="slide-3" class="content">
-              <h2 id="agenda">Agenda</h2><dd>
+              <h2>Agenda</h2><p></p>
+<dd>
    <table>
-<tr><td><h3>1. Introductions</h3></td></tr>
-<tr><td><h3>&nbsp;</h3></td></tr>
-<tr><td><h3>&nbsp;</h3></td></tr>
+<tr><td><h1>1. Introductions</h1></td></tr>
+<tr><td><h1>&nbsp;</h1></td></tr>
+<tr><td><h1>&nbsp;</h1></td></tr>
 </table>
 </dd>
             </div>
@@ -4886,11 +4898,12 @@ jQuery.extend( jQuery.easing,
         
           <div class="">
             <div id="slide-4" class="content">
-              <h2 id="agenda">Agenda</h2><dd>
+              <h2>Agenda</h2><p></p>
+<dd>
    <table>
-<tr><td><h3>1. Introductions</h3></td></tr>
-<tr><td><h3>2. Programming basics</h3></td></tr>
-<tr><td><h3>&nbsp;</h3></td></tr>
+<tr><td><h1>1. Introductions</h1></td></tr>
+<tr><td><h1>2. Programming basics</h1></td></tr>
+<tr><td><h1>&nbsp;</h1></td></tr>
 </table>
 </dd>
             </div>
@@ -4898,11 +4911,12 @@ jQuery.extend( jQuery.easing,
         
           <div class="">
             <div id="slide-5" class="content">
-              <h2 id="agenda">Agenda</h2><dd>
+              <h2>Agenda</h2><p></p>
+<dd>
    <table>
-<tr><td><h3>1. Introductions</h3></td></tr>
-<tr><td><h3>2. Programming basics</h3></td></tr>
-<tr><td><h3>3. Write some code!</h3></td></tr>
+<tr><td><h1>1. Introductions</h1></td></tr>
+<tr><td><h1>2. Programming basics</h1></td></tr>
+<tr><td><h1>3. Write some code!</h1></td></tr>
 </table>
 </dd>
             </div>
@@ -4910,55 +4924,56 @@ jQuery.extend( jQuery.easing,
         
           <div class="">
             <div id="slide-6" class="content">
-              <h2 id="instructors">Instructors</h2><ul>
+              <h2>Instructors</h2><ul>
 <li><strong>Sarah Mei</strong></li>
-
-<li><strong>Wendy Peikes</strong></li>
-
 <li><strong>Juanita Mah</strong></li>
+<li><strong>Akkana Peck</strong></li>
+<li><strong>Mary Ann Brennan</strong></li>
+<li><strong>Marilyn Nguyen</strong></li>
+<li><strong>Elise Scher</strong></li>
 </ul>
             </div>
           </div>
         
           <div class="">
             <div id="slide-7" class="content">
-              <h2 id="you">You</h2><p>Your name, your dream job, and your favorite whatever.</p>
+              <h2>You</h2><p>Your name and your favorite color.</p>
             </div>
           </div>
         
           <div class="">
             <div id="slide-8" class="content">
-              <h2 id="programming">Programming.</h2>
+              <h2>Programming.</h2>
             </div>
           </div>
         
           <div class=" centereverything">
             <div id="slide-9" class="content">
-              <img src="img/yuan2003_cubicles.jpg">
+              <p><img src="img/yuan2003_cubicles.jpg"></p>
             </div>
           </div>
         
           <div class=" centereverything">
             <div id="slide-10" class="content">
-              <img src="img/redteam_cube_guy.jpg">
+              <p><img src="img/redteam_cube_guy.jpg"></p>
             </div>
           </div>
         
           <div class=" centereverything">
             <div id="slide-11" class="content">
-              <img src="img/Akash_k_math.jpg">
+              <p><img src="img/Akash_k_math.jpg"></p>
             </div>
           </div>
         
           <div class=" centereverything">
             <div id="slide-12" class="content">
-              <img src="img/Shawn_Econo_language.jpg">
+              <p><img src="img/Shawn_Econo_language.jpg"></p>
             </div>
           </div>
         
           <div class=" ">
             <div id="slide-13" class="content">
-              <img src="img/ruby_logo.jpg" height="200">
+              <p><img src="img/ruby_logo.jpg" height="200"></p>
             </div>
           </div>
         
@@ -5032,17 +5047,18 @@ jQuery.extend( jQuery.easing,
         
           <div class=" centereverything">
             <div id="slide-18" class="content">
-              <img src="img/folder.png"><img src="img/notepad.jpg"><img src="img/shoes_logo_round.jpg" height="60">
+              <p><img src="img/folder.png"><img src="img/notepad.jpg"><img src="img/shoes_logo_round.jpg" height="60"></p>
             </div>
           </div>
         
           <div class="">
             <div id="slide-19" class="content">
-              <h2 id="thank_you">Thank you!</h2><h2 id="id3">&nbsp;</h2><h4 id="have_a_great_rest_of_the_week">Have a great rest of the week!</h4><h4 id="slides_and_sample_code">Slides and sample code:</h4><h4 id="httpgithubcomsarahmeigetset">http://github.com/sarahmei/getset</h4>
+              <h2>Thank you!</h2><h2>&nbsp;</h2><h4>Have a great week!</h4><h4><font color="red" size="+10">Don't forget your USB key!</font></h4><h4>&nbsp;</h4><h4>Slides and sample code:</h4><h4>http://github.com/sarahmei/getset</h4><h4>&nbsp;</h4><h4>Me: sarahmei@gmail.com, @sarahmei on Twitter</h4>
             </div>
           </div>
         
-          <div class="">
+          <div class="
+  ">
             <div id="slide-20" class="content">
               <p>Photo credits: Yukihiro Matsumoto, <code>_</code>why the lucky stiff, Flickr users macwagen, yuan2003, redteam, Akash k, and Shawn Econo, and Microsoft.</p>
             </div>

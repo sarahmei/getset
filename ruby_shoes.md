@@ -4,7 +4,7 @@
 # GetSET Ruby Workshop
 ### &nbsp;
 ### Sarah Mei
-### August 5th, 2009
+### August 5th, 2010
 ### http://github.com/sarahmei/getset
 
 !SLIDE
@@ -20,9 +20,9 @@
 ## Agenda
 <dd>
    <table>
-   <tr><td><h3>1. Introductions</h3></td></tr>
-   <tr><td><h3>&nbsp;</h3></td></tr>
-   <tr><td><h3>&nbsp;</h3></td></tr>
+   <tr><td><h1>1. Introductions</h1></td></tr>
+   <tr><td><h1>&nbsp;</h1></td></tr>
+   <tr><td><h1>&nbsp;</h1></td></tr>
    </table>
 </dd>
 
@@ -31,9 +31,9 @@
 ## Agenda
 <dd>
    <table>
-   <tr><td><h3>1. Introductions</h3></td></tr>
-   <tr><td><h3>2. Programming basics</h3></td></tr>
-   <tr><td><h3>&nbsp;</h3></td></tr>
+   <tr><td><h1>1. Introductions</h1></td></tr>
+   <tr><td><h1>2. Programming basics</h1></td></tr>
+   <tr><td><h1>&nbsp;</h1></td></tr>
    </table>
 </dd>
 
@@ -42,9 +42,9 @@
 ## Agenda
 <dd>
    <table>
-   <tr><td><h3>1. Introductions</h3></td></tr>
-   <tr><td><h3>2. Programming basics</h3></td></tr>
-   <tr><td><h3>3. Write some code!</h3></td></tr>
+   <tr><td><h1>1. Introductions</h1></td></tr>
+   <tr><td><h1>2. Programming basics</h1></td></tr>
+   <tr><td><h1>3. Write some code!</h1></td></tr>
    </table>
 </dd>
 
@@ -52,13 +52,16 @@
 
 ## Instructors
 * **Sarah Mei**
-* **Wendy Peikes**
 * **Juanita Mah**
+* **Akkana Peck**
+* **Mary Ann Brennan**
+* **Marilyn Nguyen**
+* **Elise Scher**
 
 !SLIDE
 
 ## You
-Your name, your dream job, and your favorite whatever.
+Your name and your favorite color.
 
 !SLIDE
 
@@ -144,9 +147,13 @@ Your name, your dream job, and your favorite whatever.
 
 ## Thank you!
 ## &nbsp;
-#### Have a great rest of the week!
+#### Have a great week!
+#### <font color="red" size="+10">Don't forget your USB key!</font>
+#### &nbsp;
 #### Slides and sample code:
 #### http://github.com/sarahmei/getset
+#### &nbsp;
+#### Me: sarahmei@gmail.com, @sarahmei on Twitter
 
 !SLIDE
  
